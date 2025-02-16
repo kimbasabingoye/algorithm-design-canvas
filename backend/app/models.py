@@ -4,6 +4,10 @@ from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
 
+################################################
+#           USER MODEL
+################################################
+
 # Shared properties
 class UserBase(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
@@ -25,7 +29,8 @@ class UserRegister(SQLModel):
 
 # Properties to receive via API on update, all are optional
 class UserUpdate(UserBase):
-    email: EmailStr | None = Field(default=None, max_length=255)  # type: ignore
+    email: EmailStr | None = Field(
+        default=None, max_length=255)  # type: ignore
     password: str | None = Field(default=None, min_length=8, max_length=40)
 
 
@@ -43,7 +48,8 @@ class UpdatePassword(SQLModel):
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
-    items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
+    canvases: list["Canvas"] = Relationship(
+        back_populates="owner", cascade_delete=True)
 
 
 # Properties to return via API, id is always required
@@ -55,45 +61,61 @@ class UsersPublic(SQLModel):
     data: list[UserPublic]
     count: int
 
+################################################
+#           CANVAS MODEL
+################################################
 
 # Shared properties
-class ItemBase(SQLModel):
-    title: str = Field(min_length=1, max_length=255)
-    description: str | None = Field(default=None, max_length=255)
 
 
-# Properties to receive on item creation
-class ItemCreate(ItemBase):
+class CanvasBase(SQLModel):
+    problem_name: str = Field(min_length=1, max_length=255)
+    problem_url: str = Field(min_length=1, max_length=255)
+    ideas: str | None
+    constraints: str | None
+    test_cases: str | None
+    code: str | None
+
+
+# Properties to receive on canvas creation
+class CanvasCreate(CanvasBase):
     pass
 
 
-# Properties to receive on item update
-class ItemUpdate(ItemBase):
-    title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore
+# Properties to receive on canvas update
+class CanvasUpdate(CanvasBase):
+    problem_name: str | None = Field(
+        default=None, min_length=1, max_length=255)
+    problem_url: str | None = Field(default=None, min_length=1, max_length=255)
 
 
 # Database model, database table inferred from class name
-class Item(ItemBase, table=True):
+class Canvas(CanvasBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    title: str = Field(max_length=255)
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-    owner: User | None = Relationship(back_populates="items")
+    owner: User | None = Relationship(back_populates="canvases")
 
 
 # Properties to return via API, id is always required
-class ItemPublic(ItemBase):
+class CanvasPublic(CanvasBase):
     id: uuid.UUID
     owner_id: uuid.UUID
 
 
-class ItemsPublic(SQLModel):
-    data: list[ItemPublic]
+class CanvasesPublic(SQLModel):
+    data: list[CanvasPublic]
     count: int
 
 
+################################################
+#           Generic Models
+################################################
+
 # Generic message
+
+
 class Message(SQLModel):
     message: str
 
