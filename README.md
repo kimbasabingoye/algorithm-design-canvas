@@ -18,10 +18,10 @@ Algorithm Design Canvas is an open-source platform that implement the described 
 - Authentication: JWT
 
 ### Getting Started
-[Installation and usage instructions would go here]
+Coming soon...
 
 ### Contributing
-We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) for details.
+Coming soon...
 
 ### License
 MIT License
