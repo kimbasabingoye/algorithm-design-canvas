@@ -17,20 +17,20 @@ import { type SubmitHandler, useForm } from "react-hook-form"
 
 import {
   type ApiError,
-  type ItemPublic,
-  type ItemUpdate,
-  ItemsService,
+  type CanvasPublic,
+  type CanvasUpdate,
+  CanvasesService,
 } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 import { handleError } from "../../utils"
 
-interface EditItemProps {
-  item: ItemPublic
+interface EditCanvasProps {
+  canvas: CanvasPublic
   isOpen: boolean
   onClose: () => void
 }
 
-const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
+const EditCanvas = ({ canvas: canvas, isOpen, onClose }: EditCanvasProps) => {
   const queryClient = useQueryClient()
   const showToast = useCustomToast()
   const {
@@ -38,28 +38,28 @@ const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
     handleSubmit,
     reset,
     formState: { isSubmitting, errors, isDirty },
-  } = useForm<ItemUpdate>({
+  } = useForm<CanvasUpdate>({
     mode: "onBlur",
     criteriaMode: "all",
-    defaultValues: item,
+    defaultValues: canvas,
   })
 
   const mutation = useMutation({
-    mutationFn: (data: ItemUpdate) =>
-      ItemsService.updateItem({ id: item.id, requestBody: data }),
+    mutationFn: (data: CanvasUpdate) =>
+      CanvasesService.updateCanvas({ id: canvas.id, requestBody: data }),
     onSuccess: () => {
-      showToast("Success!", "Item updated successfully.", "success")
+      showToast("Success!", "Canvas updated successfully.", "success")
       onClose()
     },
     onError: (err: ApiError) => {
       handleError(err, showToast)
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] })
+      queryClient.invalidateQueries({ queryKey: ["canvases"] })
     },
   })
 
-  const onSubmit: SubmitHandler<ItemUpdate> = async (data) => {
+  const onSubmit: SubmitHandler<CanvasUpdate> = async (data) => {
     mutation.mutate(data)
   }
 
@@ -81,25 +81,25 @@ const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
           <ModalHeader>Edit Item</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isInvalid={!!errors.title}>
-              <FormLabel htmlFor="title">Title</FormLabel>
+            <FormControl isInvalid={!!errors.problem_name}>
+              <FormLabel htmlFor="prolem_name">Problem Name</FormLabel>
               <Input
-                id="title"
-                {...register("title", {
-                  required: "Title is required",
+                id="problem_name"
+                {...register("problem_name", {
+                  required: "Problem Name is required",
                 })}
                 type="text"
               />
-              {errors.title && (
-                <FormErrorMessage>{errors.title.message}</FormErrorMessage>
+              {errors.problem_name && (
+                <FormErrorMessage>{errors.problem_name.message}</FormErrorMessage>
               )}
             </FormControl>
             <FormControl mt={4}>
-              <FormLabel htmlFor="description">Description</FormLabel>
+              <FormLabel htmlFor="problem_url">Problem URL</FormLabel>
               <Input
-                id="description"
-                {...register("description")}
-                placeholder="Description"
+                id="problem_url"
+                {...register("problem_url")}
+                placeholder="Problem URL"
                 type="text"
               />
             </FormControl>
@@ -121,4 +121,4 @@ const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
   )
 }
 
-export default EditItem
+export default EditCanvas

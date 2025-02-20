@@ -17,31 +17,31 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useEffect } from "react"
 import { z } from "zod"
 
-import { ItemsService } from "../../client"
+import { CanvasesService } from "../../client"
 import ActionsMenu from "../../components/Common/ActionsMenu"
 import Navbar from "../../components/Common/Navbar"
-import AddItem from "../../components/Items/AddItem"
+import AddCanvas from "../../components/Canvases/AddCanvas"
 
-const itemsSearchSchema = z.object({
+const canvasesSearchSchema = z.object({
   page: z.number().catch(1),
 })
 
-export const Route = createFileRoute("/_layout/items")({
-  component: Items,
-  validateSearch: (search) => itemsSearchSchema.parse(search),
+export const Route = createFileRoute("/_layout/canvases")({
+  component: Canvases,
+  validateSearch: (search) => canvasesSearchSchema.parse(search),
 })
 
 const PER_PAGE = 5
 
-function getItemsQueryOptions({ page }: { page: number }) {
+function getCanvasesQueryOptions({ page }: { page: number }) {
   return {
     queryFn: () =>
-      ItemsService.readItems({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
-    queryKey: ["items", { page }],
+      CanvasesService.readCanvases({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
+    queryKey: ["canvases", { page }],
   }
 }
 
-function ItemsTable() {
+function CanvasesTable() {
   const queryClient = useQueryClient()
   const { page } = Route.useSearch()
   const navigate = useNavigate({ from: Route.fullPath })
@@ -49,20 +49,20 @@ function ItemsTable() {
     navigate({ search: (prev) => ({ ...prev, page }) })
 
   const {
-    data: items,
+    data: canvases,
     isPending,
     isPlaceholderData,
   } = useQuery({
-    ...getItemsQueryOptions({ page }),
+    ...getCanvasesQueryOptions({ page }),
     placeholderData: (prevData) => prevData,
   })
 
-  const hasNextPage = !isPlaceholderData && items?.data.length === PER_PAGE
+  const hasNextPage = !isPlaceholderData && canvases?.data.length === PER_PAGE
   const hasPreviousPage = page > 1
 
   useEffect(() => {
     if (hasNextPage) {
-      queryClient.prefetchQuery(getItemsQueryOptions({ page: page + 1 }))
+      queryClient.prefetchQuery(getCanvasesQueryOptions({ page: page + 1 }))
     }
   }, [page, queryClient, hasNextPage])
 
@@ -73,8 +73,8 @@ function ItemsTable() {
           <Thead>
             <Tr>
               <Th>ID</Th>
-              <Th>Title</Th>
-              <Th>Description</Th>
+              <Th>Problem Name</Th>
+              <Th>Problem URL</Th>
               <Th>Actions</Th>
             </Tr>
           </Thead>
@@ -90,21 +90,21 @@ function ItemsTable() {
             </Tbody>
           ) : (
             <Tbody>
-              {items?.data.map((item) => (
-                <Tr key={item.id} opacity={isPlaceholderData ? 0.5 : 1}>
-                  <Td>{item.id}</Td>
+              {canvases?.data.map((canvas) => (
+                <Tr key={canvas.id} opacity={isPlaceholderData ? 0.5 : 1}>
+                  <Td>{canvas.id}</Td>
                   <Td isTruncated maxWidth="150px">
-                    {item.title}
+                    {canvas.problem_name}
                   </Td>
                   <Td
-                    color={!item.description ? "ui.dim" : "inherit"}
+                    color={!canvas.problem_url ? "ui.dim" : "inherit"}
                     isTruncated
                     maxWidth="150px"
                   >
-                    {item.description || "N/A"}
+                    {canvas.problem_url || "N/A"}
                   </Td>
                   <Td>
-                    <ActionsMenu type={"Item"} value={item} />
+                    <ActionsMenu type={"Canvas"} value={canvas} />
                   </Td>
                 </Tr>
               ))}
@@ -131,15 +131,15 @@ function ItemsTable() {
   )
 }
 
-function Items() {
+function Canvases() {
   return (
     <Container maxW="full">
       <Heading size="lg" textAlign={{ base: "center", md: "left" }} pt={12}>
-        Items Management
+        Canvases Management
       </Heading>
 
-      <Navbar type={"Item"} addModalAs={AddItem} />
-      <ItemsTable />
+      <Navbar type={"Canvas"} addModalAs={AddCanvas} />
+      <CanvasesTable />
     </Container>
   )
 }

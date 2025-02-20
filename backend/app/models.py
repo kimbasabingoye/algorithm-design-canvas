@@ -70,11 +70,11 @@ class UsersPublic(SQLModel):
 
 class CanvasBase(SQLModel):
     problem_name: str = Field(min_length=1, max_length=255)
-    problem_url: str = Field(min_length=1, max_length=255)
-    ideas: str | None
-    constraints: str | None
-    test_cases: str | None
-    code: str | None
+    problem_url: str | None = Field(default=None, max_length=255)
+    ideas: str | None = Field(default=None)
+    constraints: str | None = Field(default=None)
+    test_cases: str | None = Field(default=None)
+    code: str | None = Field(default=None)
 
 
 # Properties to receive on canvas creation
@@ -84,9 +84,7 @@ class CanvasCreate(CanvasBase):
 
 # Properties to receive on canvas update
 class CanvasUpdate(CanvasBase):
-    problem_name: str | None = Field(
-        default=None, min_length=1, max_length=255)
-    problem_url: str | None = Field(default=None, min_length=1, max_length=255)
+    problem_name: str | None = Field(default=None, min_length=1, max_length=255)
 
 
 # Database model, database table inferred from class name

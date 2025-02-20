@@ -49,26 +49,15 @@ export const $Body_login_login_access_token = {
   },
 } as const
 
-export const $HTTPValidationError = {
+export const $CanvasCreate = {
   properties: {
-    detail: {
-      type: "array",
-      contains: {
-        type: "ValidationError",
-      },
-    },
-  },
-} as const
-
-export const $ItemCreate = {
-  properties: {
-    title: {
+    problem_name: {
       type: "string",
       isRequired: true,
       maxLength: 255,
       minLength: 1,
     },
-    description: {
+    problem_url: {
       type: "any-of",
       contains: [
         {
@@ -80,23 +69,111 @@ export const $ItemCreate = {
         },
       ],
     },
+    ideas: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    constraints: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    test_cases: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    code: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
   },
 } as const
 
-export const $ItemPublic = {
+export const $CanvasPublic = {
   properties: {
-    title: {
+    problem_name: {
       type: "string",
       isRequired: true,
       maxLength: 255,
       minLength: 1,
     },
-    description: {
+    problem_url: {
       type: "any-of",
       contains: [
         {
           type: "string",
           maxLength: 255,
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    ideas: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    constraints: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    test_cases: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    code: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
         },
         {
           type: "null",
@@ -116,9 +193,9 @@ export const $ItemPublic = {
   },
 } as const
 
-export const $ItemUpdate = {
+export const $CanvasUpdate = {
   properties: {
-    title: {
+    problem_name: {
       type: "any-of",
       contains: [
         {
@@ -131,7 +208,7 @@ export const $ItemUpdate = {
         },
       ],
     },
-    description: {
+    problem_url: {
       type: "any-of",
       contains: [
         {
@@ -143,21 +220,76 @@ export const $ItemUpdate = {
         },
       ],
     },
+    ideas: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    constraints: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    test_cases: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    code: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
   },
 } as const
 
-export const $ItemsPublic = {
+export const $CanvasesPublic = {
   properties: {
     data: {
       type: "array",
       contains: {
-        type: "ItemPublic",
+        type: "CanvasPublic",
       },
       isRequired: true,
     },
     count: {
       type: "number",
       isRequired: true,
+    },
+  },
+} as const
+
+export const $HTTPValidationError = {
+  properties: {
+    detail: {
+      type: "array",
+      contains: {
+        type: "ValidationError",
+      },
     },
   },
 } as const

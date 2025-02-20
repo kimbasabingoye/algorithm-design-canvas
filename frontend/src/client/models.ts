@@ -7,30 +7,42 @@ export type Body_login_login_access_token = {
   client_secret?: string | null
 }
 
-export type HTTPValidationError = {
-  detail?: Array<ValidationError>
+export type CanvasCreate = {
+  problem_name: string
+  problem_url?: string | null
+  ideas?: string | null
+  constraints?: string | null
+  test_cases?: string | null
+  code?: string | null
 }
 
-export type ItemCreate = {
-  title: string
-  description?: string | null
-}
-
-export type ItemPublic = {
-  title: string
-  description?: string | null
+export type CanvasPublic = {
+  problem_name: string
+  problem_url?: string | null
+  ideas?: string | null
+  constraints?: string | null
+  test_cases?: string | null
+  code?: string | null
   id: string
   owner_id: string
 }
 
-export type ItemUpdate = {
-  title?: string | null
-  description?: string | null
+export type CanvasUpdate = {
+  problem_name?: string | null
+  problem_url?: string | null
+  ideas?: string | null
+  constraints?: string | null
+  test_cases?: string | null
+  code?: string | null
 }
 
-export type ItemsPublic = {
-  data: Array<ItemPublic>
+export type CanvasesPublic = {
+  data: Array<CanvasPublic>
   count: number
+}
+
+export type HTTPValidationError = {
+  detail?: Array<ValidationError>
 }
 
 export type Message = {

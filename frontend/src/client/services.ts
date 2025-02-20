@@ -14,10 +14,10 @@ import type {
   UsersPublic,
   UserUpdate,
   UserUpdateMe,
-  ItemCreate,
-  ItemPublic,
-  ItemsPublic,
-  ItemUpdate,
+  CanvasCreate,
+  CanvasesPublic,
+  CanvasPublic,
+  CanvasUpdate,
 } from "./models"
 
 export type TDataLoginAccessToken = {
@@ -400,38 +400,38 @@ export class UtilsService {
   }
 }
 
-export type TDataReadItems = {
+export type TDataReadCanvases = {
   limit?: number
   skip?: number
 }
-export type TDataCreateItem = {
-  requestBody: ItemCreate
+export type TDataCreateCanvas = {
+  requestBody: CanvasCreate
 }
-export type TDataReadItem = {
+export type TDataReadCanvas = {
   id: string
 }
-export type TDataUpdateItem = {
+export type TDataUpdateCanvas = {
   id: string
-  requestBody: ItemUpdate
+  requestBody: CanvasUpdate
 }
-export type TDataDeleteItem = {
+export type TDataDeleteCanvas = {
   id: string
 }
 
-export class ItemsService {
+export class CanvasesService {
   /**
-   * Read Items
-   * Retrieve items.
-   * @returns ItemsPublic Successful Response
+   * Read Canvases
+   * Retrieve canvases.
+   * @returns CanvasesPublic Successful Response
    * @throws ApiError
    */
-  public static readItems(
-    data: TDataReadItems = {},
-  ): CancelablePromise<ItemsPublic> {
+  public static readCanvases(
+    data: TDataReadCanvases = {},
+  ): CancelablePromise<CanvasesPublic> {
     const { limit = 100, skip = 0 } = data
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/items/",
+      url: "/api/v1/canvases/",
       query: {
         skip,
         limit,
@@ -443,18 +443,18 @@ export class ItemsService {
   }
 
   /**
-   * Create Item
-   * Create new item.
-   * @returns ItemPublic Successful Response
+   * Create Canvas
+   * Create new canvas.
+   * @returns CanvasPublic Successful Response
    * @throws ApiError
    */
-  public static createItem(
-    data: TDataCreateItem,
-  ): CancelablePromise<ItemPublic> {
+  public static createCanvas(
+    data: TDataCreateCanvas,
+  ): CancelablePromise<CanvasPublic> {
     const { requestBody } = data
     return __request(OpenAPI, {
       method: "POST",
-      url: "/api/v1/items/",
+      url: "/api/v1/canvases/",
       body: requestBody,
       mediaType: "application/json",
       errors: {
@@ -464,16 +464,18 @@ export class ItemsService {
   }
 
   /**
-   * Read Item
-   * Get item by ID.
-   * @returns ItemPublic Successful Response
+   * Read Canvas
+   * Get canvas by ID.
+   * @returns CanvasPublic Successful Response
    * @throws ApiError
    */
-  public static readItem(data: TDataReadItem): CancelablePromise<ItemPublic> {
+  public static readCanvas(
+    data: TDataReadCanvas,
+  ): CancelablePromise<CanvasPublic> {
     const { id } = data
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/canvases/{id}",
       path: {
         id,
       },
@@ -484,18 +486,18 @@ export class ItemsService {
   }
 
   /**
-   * Update Item
-   * Update an item.
-   * @returns ItemPublic Successful Response
+   * Update Canvas
+   * Update a canvas.
+   * @returns CanvasPublic Successful Response
    * @throws ApiError
    */
-  public static updateItem(
-    data: TDataUpdateItem,
-  ): CancelablePromise<ItemPublic> {
+  public static updateCanvas(
+    data: TDataUpdateCanvas,
+  ): CancelablePromise<CanvasPublic> {
     const { id, requestBody } = data
     return __request(OpenAPI, {
       method: "PUT",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/canvases/{id}",
       path: {
         id,
       },
@@ -508,16 +510,18 @@ export class ItemsService {
   }
 
   /**
-   * Delete Item
-   * Delete an item.
+   * Delete Canvas
+   * Delete a canvas.
    * @returns Message Successful Response
    * @throws ApiError
    */
-  public static deleteItem(data: TDataDeleteItem): CancelablePromise<Message> {
+  public static deleteCanvas(
+    data: TDataDeleteCanvas,
+  ): CancelablePromise<Message> {
     const { id } = data
     return __request(OpenAPI, {
       method: "DELETE",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/canvases/{id}",
       path: {
         id,
       },
