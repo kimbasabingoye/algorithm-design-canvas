@@ -11,102 +11,112 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SignupImport } from './routes/signup'
-import { Route as ResetPasswordImport } from './routes/reset-password'
-import { Route as RecoverPasswordImport } from './routes/recover-password'
-import { Route as LoginImport } from './routes/login'
-import { Route as LayoutImport } from './routes/_layout'
-import { Route as LayoutIndexImport } from './routes/_layout/index'
-import { Route as LayoutSettingsImport } from './routes/_layout/settings'
-import { Route as LayoutCanvasesImport } from './routes/_layout/canvases'
-import { Route as LayoutAdminImport } from './routes/_layout/admin'
+import { Route as AdminImport } from './routes/admin'
+import { Route as IndexImport } from './routes/index'
+import { Route as AdminIndexImport } from './routes/admin/index'
+import { Route as AdminUsersImport } from './routes/admin/users'
+import { Route as AdminCanvasesImport } from './routes/admin/canvases'
+import { Route as AccountsSignupImport } from './routes/accounts/signup'
+import { Route as AccountsSettingsImport } from './routes/accounts/settings'
+import { Route as AccountsResetPasswordImport } from './routes/accounts/reset-password'
+import { Route as AccountsRecoverPasswordImport } from './routes/accounts/recover-password'
+import { Route as AccountsLoginImport } from './routes/accounts/login'
 
 // Create/Update Routes
 
-const SignupRoute = SignupImport.update({
-  path: '/signup',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ResetPasswordRoute = ResetPasswordImport.update({
-  path: '/reset-password',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const RecoverPasswordRoute = RecoverPasswordImport.update({
-  path: '/recover-password',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LoginRoute = LoginImport.update({
-  path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LayoutRoute = LayoutImport.update({
-  id: '/_layout',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LayoutIndexRoute = LayoutIndexImport.update({
-  path: '/',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutSettingsRoute = LayoutSettingsImport.update({
-  path: '/settings',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutCanvasesRoute = LayoutCanvasesImport.update({
-  path: '/canvases',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
-const LayoutAdminRoute = LayoutAdminImport.update({
+const AdminRoute = AdminImport.update({
   path: '/admin',
-  getParentRoute: () => LayoutRoute,
+  getParentRoute: () => rootRoute,
+} as any)
+
+const IndexRoute = IndexImport.update({
+  path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminIndexRoute = AdminIndexImport.update({
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+
+const AdminUsersRoute = AdminUsersImport.update({
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+
+const AdminCanvasesRoute = AdminCanvasesImport.update({
+  path: '/canvases',
+  getParentRoute: () => AdminRoute,
+} as any)
+
+const AccountsSignupRoute = AccountsSignupImport.update({
+  path: '/accounts/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AccountsSettingsRoute = AccountsSettingsImport.update({
+  path: '/accounts/settings',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AccountsResetPasswordRoute = AccountsResetPasswordImport.update({
+  path: '/accounts/reset-password',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AccountsRecoverPasswordRoute = AccountsRecoverPasswordImport.update({
+  path: '/accounts/recover-password',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AccountsLoginRoute = AccountsLoginImport.update({
+  path: '/accounts/login',
+  getParentRoute: () => rootRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_layout': {
-      preLoaderRoute: typeof LayoutImport
+    '/': {
+      preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/login': {
-      preLoaderRoute: typeof LoginImport
+    '/admin': {
+      preLoaderRoute: typeof AdminImport
       parentRoute: typeof rootRoute
     }
-    '/recover-password': {
-      preLoaderRoute: typeof RecoverPasswordImport
+    '/accounts/login': {
+      preLoaderRoute: typeof AccountsLoginImport
       parentRoute: typeof rootRoute
     }
-    '/reset-password': {
-      preLoaderRoute: typeof ResetPasswordImport
+    '/accounts/recover-password': {
+      preLoaderRoute: typeof AccountsRecoverPasswordImport
       parentRoute: typeof rootRoute
     }
-    '/signup': {
-      preLoaderRoute: typeof SignupImport
+    '/accounts/reset-password': {
+      preLoaderRoute: typeof AccountsResetPasswordImport
       parentRoute: typeof rootRoute
     }
-    '/_layout/admin': {
-      preLoaderRoute: typeof LayoutAdminImport
-      parentRoute: typeof LayoutImport
+    '/accounts/settings': {
+      preLoaderRoute: typeof AccountsSettingsImport
+      parentRoute: typeof rootRoute
     }
-    '/_layout/canvases': {
-      preLoaderRoute: typeof LayoutCanvasesImport
-      parentRoute: typeof LayoutImport
+    '/accounts/signup': {
+      preLoaderRoute: typeof AccountsSignupImport
+      parentRoute: typeof rootRoute
     }
-    '/_layout/settings': {
-      preLoaderRoute: typeof LayoutSettingsImport
-      parentRoute: typeof LayoutImport
+    '/admin/canvases': {
+      preLoaderRoute: typeof AdminCanvasesImport
+      parentRoute: typeof AdminImport
     }
-    '/_layout/': {
-      preLoaderRoute: typeof LayoutIndexImport
-      parentRoute: typeof LayoutImport
+    '/admin/users': {
+      preLoaderRoute: typeof AdminUsersImport
+      parentRoute: typeof AdminImport
+    }
+    '/admin/': {
+      preLoaderRoute: typeof AdminIndexImport
+      parentRoute: typeof AdminImport
     }
   }
 }
@@ -114,16 +124,17 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  LayoutRoute.addChildren([
-    LayoutAdminRoute,
-    LayoutCanvasesRoute,
-    LayoutSettingsRoute,
-    LayoutIndexRoute,
+  IndexRoute,
+  AdminRoute.addChildren([
+    AdminCanvasesRoute,
+    AdminUsersRoute,
+    AdminIndexRoute,
   ]),
-  LoginRoute,
-  RecoverPasswordRoute,
-  ResetPasswordRoute,
-  SignupRoute,
+  AccountsLoginRoute,
+  AccountsRecoverPasswordRoute,
+  AccountsResetPasswordRoute,
+  AccountsSettingsRoute,
+  AccountsSignupRoute,
 ])
 
 /* prettier-ignore-end */

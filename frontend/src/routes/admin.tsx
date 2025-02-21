@@ -5,12 +5,12 @@ import Sidebar from "../components/Common/Sidebar"
 import UserMenu from "../components/Common/UserMenu"
 import useAuth, { isLoggedIn } from "../hooks/useAuth"
 
-export const Route = createFileRoute("/_layout")({
+export const Route = createFileRoute("/admin")({
   component: Layout,
   beforeLoad: async () => {
     if (!isLoggedIn()) {
       throw redirect({
-        to: "/login",
+        to: "/accounts/login",
       })
     }
   },

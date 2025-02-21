@@ -26,7 +26,7 @@ const canvasesSearchSchema = z.object({
   page: z.number().catch(1),
 })
 
-export const Route = createFileRoute("/_layout/canvases")({
+export const Route = createFileRoute("/admin/canvases")({
   component: Canvases,
   validateSearch: (search) => canvasesSearchSchema.parse(search),
 })
