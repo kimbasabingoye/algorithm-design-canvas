@@ -1,15 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { Menu, ChevronRight } from 'lucide-react';
-import { Box, Button, Flex, Collapsible, Heading, Link, LuExternalLink, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Link, Text, VStack } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { CodeEditor, MultilineEditor } from '../components/Canvases/Editor';
 import { Header } from '../components/Common/Header';
 
-import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { CanvasesService } from "../../client"
-import { z } from "zod"
-import { CanvasPublic } from '../client';
 
 export const Route = createFileRoute('/')({
   component: () => <ProblemSolvingGrid />
