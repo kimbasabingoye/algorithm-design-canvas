@@ -20,7 +20,7 @@ import { type SubmitHandler, useForm } from "react-hook-form"
 import Logo from "/assets/images/fastapi-logo.svg"
 import type { UserRegister } from "../../client"
 import useAuth, { isLoggedIn } from "../../hooks/useAuth"
-import { confirmPasswordRules, emailPattern, passwordRules } from "../../utils"
+import { confirmPasswordRules, emailPattern, passwordRules } from "../../utils/utils"
 
 export const Route = createFileRoute("/accounts/signup")({
   component: SignUp,

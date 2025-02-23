@@ -22,7 +22,7 @@ import {
   CanvasesService,
 } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
-import { handleError } from "../../utils"
+import { handleError } from "../../utils/utils"
 
 interface EditCanvasProps {
   canvas: CanvasPublic

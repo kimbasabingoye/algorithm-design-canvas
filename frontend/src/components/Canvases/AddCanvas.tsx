@@ -17,7 +17,7 @@ import { type SubmitHandler, useForm } from "react-hook-form"
 
 import { type ApiError, type CanvasCreate, CanvasesService } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
-import { handleError } from "../../utils"
+import { handleError } from "../../utils/utils"
 
 interface AddCanvasProps {
   isOpen: boolean

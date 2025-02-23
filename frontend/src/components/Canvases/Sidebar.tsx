@@ -24,3 +24,5 @@ export const Sidebar = ({ isOpen, canvases, onSelectCanvas }: SidebarProps) => {
         </Box>
     );
 };
+
+

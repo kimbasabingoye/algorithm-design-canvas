@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Box, Flex, useDisclosure } from '@chakra-ui/react';
-import { Header } from '../Common/Header/Header';
+import { Header } from '../Common/Header';
 import { Sidebar } from './Sidebar';
 import { CanvasForm } from './CanvasForm';
 import { LoginDialog } from './LoginDialog';
-import AddCanvas  from './AddCanvas';
+import AddCanvas from './AddCanvas';
 import { CanvasPublic } from '../../client/models';
 
 const API_BASE_URL = 'http://localhost:8000/api/v1/';

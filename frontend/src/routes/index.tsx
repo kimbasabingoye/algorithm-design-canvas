@@ -1,9 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { Menu, ChevronRight } from 'lucide-react';
-
+import { Box, Button, Flex, Collapsible, Heading, Link, LuExternalLink, Text, VStack } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
 import { CodeEditor, MultilineEditor } from '../components/Canvases/Editor';
-import { Header } from '../components/Common/Header/Header';
+import { Header } from '../components/Common/Header';
+
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { CanvasesService } from "../../client"
+import { z } from "zod"
+import { CanvasPublic } from '../client';
 
 export const Route = createFileRoute('/')({
   component: () => <ProblemSolvingGrid />
@@ -41,6 +47,8 @@ const canvasList: Canvas[] = [
   }
 ];
 
+
+
 const emptyCanvas: Canvas = {
   id: '',
   problem_name: '',
@@ -63,42 +71,101 @@ const ProblemSolvingGrid = () => {
     }));
   };
 
+  const onNewCanvas = () => {
+    // Logic to add a new canvas
+    const newCanvas: Canvas = {
+      id: `${canvasList.length + 1}`,
+      problem_name: 'New Canvas',
+      problem_url: '',
+      constraints: '',
+      ideas: '',
+      test_cases: '',
+      code: ''
+    };
+    canvasList.push(newCanvas);
+    setSelectedCanvas(newCanvas);
+    setContent(newCanvas);
+  };
+
   return (
     <>
       <Header />
       <div className="flex h-screen bg-gray-50">
         {/* Sidebar */}
-        <div className={`${isSidebarOpen ? 'w-64' : 'w-0'} transition-all duration-300 bg-white border-r border-gray-200 relative`}>
-          <div className="p-4">
-            <h2 className="text-xl font-medium mb-4">Canvases</h2>
-            <div className="space-y-1">
+        <Box
+          w={isSidebarOpen ? '16rem' : '0'}
+          transition="width 0.3s"
+          bg="white"
+          borderRight="1px"
+          borderColor="gray.200"
+          position="relative"
+          overflow="hidden"
+          boxShadow="lg"
+        >
+          <Box p="4" display={isSidebarOpen ? 'block' : 'none'}>
+            <Heading size="lg" mb="6">Canvases</Heading>
+            <Button
+              leftIcon={<AddIcon />}
+              colorScheme="blue"
+              variant="solid"
+              mb="6"
+              onClick={onNewCanvas}
+              width="full"
+            >
+              New Canvas
+            </Button>
+            <VStack spacing="3" align="stretch">
               {canvasList.map((canvas) => (
-                <div
+                <Box
                   key={canvas.id}
-                  className={`px-3 py-2 rounded-sm cursor-pointer text-sm ${selectedCanvas?.id === canvas.id
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'hover:bg-gray-50'
-                    }`}
+                  px="3"
+                  py="2"
+                  rounded="md"
+                  cursor="pointer"
+                  fontSize="sm"
+                  bg={selectedCanvas?.id === canvas.id ? 'blue.50' : 'transparent'}
+                  color={selectedCanvas?.id === canvas.id ? 'blue.600' : 'inherit'}
+                  _hover={{ bg: 'gray.100' }}
                   onClick={() => {
                     setSelectedCanvas(canvas);
                     setContent(canvas);
                   }}
+                  boxShadow="sm"
                 >
                   {canvas.problem_name}
-                </div>
+                </Box>
               ))}
-            </div>
-          </div>
-          <button
+            </VStack>
+          </Box>
+          <Button
             onClick={() => setSidebarOpen(false)}
-            className="absolute right-0 top-2 translate-x-full bg-white p-2 rounded-r border border-l-0 border-gray-200"
+            position="absolute"
+            right="0"
+            top="2"
+            transform="translateX(100%)"
+            bg="white"
+            p="2"
+            roundedRight="md"
+            border="1px"
+            borderColor="gray.200"
+            borderLeft="0"
           >
-            <ChevronRight size={16} />
-          </button>
-        </div>
+            <ChevronRight />
+          </Button>
+        </Box>
 
         {/* Main content */}
         <div className="flex-1">
+          {/* Problem Name Link */}
+          <div>
+            <Flex justify="space-between" align="center" bg="white" px="4" py="2" borderBottom="1px" borderColor="gray.200">
+              <Text fontWeight="medium" fontSize="lg" color="gray.600">The Algorithm Design Canvas</Text>
+              <Link href={selectedCanvas?.problem_url} isExternal color="blue.600">
+                {selectedCanvas?.problem_name || 'Problem Name'}
+              </Link>
+            </Flex>
+          </div>
+
           {!isSidebarOpen && (
             <button
               onClick={() => setSidebarOpen(true)}
@@ -109,13 +176,13 @@ const ProblemSolvingGrid = () => {
           )}
 
           {/* Grid Layout */}
-          <div className="grid grid-cols-3 gap-1 h-full">
+          <div className="grid grid-cols-3 h-full">
             {/* First column taking 1/3 of space */}
             <div className="col-span-1">
               <div className="grid grid-rows-3 h-full gap-1">
                 {/* Constraints section */}
                 <div className="bg-white">
-                  <div className="px-4 py-2 border-b">
+                  <div className="px-4 py-2 border border-gray-700">
                     <h5 className="font-medium text-sm text-gray-600">Constraints</h5>
                   </div>
                   <MultilineEditor
@@ -125,27 +192,27 @@ const ProblemSolvingGrid = () => {
                   />
                 </div>
 
-                {/* Test Cases section */}
-                <div className="bg-white">
-                  <div className="px-4 py-2 border-b">
-                    <h5 className="font-medium text-sm text-gray-600">Test Cases</h5>
-                  </div>
-                  <MultilineEditor
-                    value={content.test_cases}
-                    onChange={(e) => handleChange('test_cases', e.target.value)}
-                    placeholder="Enter test cases..."
-                  />
-                </div>
-
                 {/* Ideas section */}
                 <div className="bg-white">
-                  <div className="px-4 py-2 border-b">
+                  <div className="px-4 py-2 border border-gray-700">
                     <h5 className="font-medium text-sm text-gray-600">Ideas</h5>
                   </div>
                   <MultilineEditor
                     value={content.ideas}
                     onChange={(e) => handleChange('ideas', e.target.value)}
                     placeholder="Enter ideas..."
+                  />
+                </div>
+
+                {/* Test Cases section */}
+                <div className="bg-white">
+                  <div className="px-4 py-2 border border-gray-700">
+                    <h5 className="font-medium text-sm text-gray-600">Test Cases</h5>
+                  </div>
+                  <MultilineEditor
+                    value={content.test_cases}
+                    onChange={(e) => handleChange('test_cases', e.target.value)}
+                    placeholder="Enter test cases..."
                   />
                 </div>
               </div>
